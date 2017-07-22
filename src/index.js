@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-var createReactClass = require('create-react-class');
+let createReactClass = require('create-react-class');
+import axios from 'axios';
 
-var Ninja = createReactClass({
+let Ninja = createReactClass({
   getInitialState(){
     return({
       ninjas: []
     });
   },
   render(){
-    var ninjas = this.state.ninjas;
+    let ninjas = this.state.ninjas;
     ninjas = ninjas.map(function(ninja, index){
       return(
         <li key={index}>
@@ -35,15 +36,14 @@ var Ninja = createReactClass({
   },
   handleSubmit(event){
     event.preventDefault();
-    var lng = this.refs.lng.value;
-    var lat = this.refs.lat.value;
-    fetch('/api/ninjas?lng=' + lng + '&lat=' + lat).then(function(data){
-      return data.json();
-    }).then( json => {
+    let lng = this.refs.lng.value;
+    let lat = this.refs.lat.value;
+    let url = `/api/ninjas?lng=${lng}&lat=${lat}`;
+
+    axios.get(url).then((res) => {
       this.setState({
-        ninjas: json
+        ninjas: res.data
       });
-      console.log(json);
     });
   }
 });
